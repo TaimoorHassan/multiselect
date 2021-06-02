@@ -1,6 +1,6 @@
 name: multiselect
 description: A simple multiselect dropdown
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/TaimoorHassan/multiselect
 
 environment:
