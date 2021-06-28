@@ -12,7 +12,12 @@ class _SelectRow extends StatelessWidget {
   final bool selected;
   final String text;
 
-  const _SelectRow({Key? key, required this.onChange, required this.selected, required this.text}) : super(key: key);
+  const _SelectRow(
+      {Key? key,
+      required this.onChange,
+      required this.selected,
+      required this.text})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -52,8 +57,6 @@ class DropDownMultiSelect extends StatefulWidget {
   /// Input decoration
   final InputDecoration? decoration;
 
-
-
   /// this text is shown when there is no selection
   final String? whenEmpty;
 
@@ -82,15 +85,20 @@ class DropDownMultiSelect extends StatefulWidget {
 class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
   @override
   Widget build(BuildContext context) {
-    return Container( height: 100,
+    return Container(
+      height: 100,
       child: Stack(
         children: [
           _theState.rebuilder(() => widget.childBuilder != null
               ? widget.childBuilder!(widget.selectedValues)
               : Align(
                   child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Text(widget.selectedValues.length > 0 ? widget.selectedValues.reduce((a, b) => a + ' , ' + b) : widget.whenEmpty ?? '')),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                      child: Text(widget.selectedValues.length > 0
+                          ? widget.selectedValues
+                              .reduce((a, b) => a + ' , ' + b)
+                          : widget.whenEmpty ?? '')),
                   alignment: Alignment.centerLeft)),
           Align(
             alignment: Alignment.centerLeft,
