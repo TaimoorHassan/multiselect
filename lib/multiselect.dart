@@ -87,80 +87,57 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      child: Stack(
-        children: [
-          _theState.rebuilder(() => widget.childBuilder != null
-              ? widget.childBuilder!(widget.selectedValues)
-              : Align(
-                  child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Text(widget.selectedValues.length > 0
-                          ? widget.selectedValues
-                              .reduce((a, b) => a + ' , ' + b)
-                          : widget.whenEmpty ?? '')),
-                  alignment: Alignment.centerLeft)),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: DropdownButtonFormField<String>(
-              decoration: widget.decoration != null
-                  ? widget.decoration
-                  : InputDecoration(
-                      border: OutlineInputBorder(),
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 10,
-                      ),
-                    ),
-              isDense: true,
-              onChanged: widget.enabled ? (x) {} : null,
-              value: null,
-              selectedItemBuilder: (context) {
-                return widget.options
-                    .map((e) => DropdownMenuItem(
-                          child: Container(),
-                        ))
-                    .toList();
-              },
-              items: widget.options
-                  .map((x) => DropdownMenuItem(
-                        child: _theState.rebuilder(() {
-                          return widget.menuItembuilder != null
-                              ? widget.menuItembuilder!(x)
-                              : _SelectRow(
-                                  selected: widget.selectedValues.contains(x),
-                                  text: x,
-                                  onChange: (isSelected) {
-                                    if (isSelected) {
-                                      var ns = widget.selectedValues;
-                                      ns.add(x);
-                                      widget.onChanged(ns);
-                                    } else {
-                                      var ns = widget.selectedValues;
-                                      ns.remove(x);
-                                      widget.onChanged(ns);
-                                    }
-                                  },
-                                );
-                        }),
-                        value: x,
-                        onTap: () {
-                          if (widget.selectedValues.contains(x)) {
-                            var ns = widget.selectedValues;
-                            ns.remove(x);
-                            widget.onChanged(ns);
-                          } else {
-                            var ns = widget.selectedValues;
-                            ns.add(x);
-                            widget.onChanged(ns);
-                          }
-                        },
-                      ))
-                  .toList(),
-            ),
-          ),
-        ],
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: DropdownButtonFormField<String>(
+          decoration: widget.decoration != null
+              ? widget.decoration!.copyWith(
+                  hintText: widget.selectedValues.length > 0
+                      ? widget.selectedValues.reduce((a, b) => a + ', ' + b)
+                      : widget.whenEmpty ?? '')
+              : InputDecoration(
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+          isDense: true,
+          onChanged: widget.enabled ? (x) {} : null,
+          value: null,
+          items: widget.options
+              .map((x) => DropdownMenuItem(
+                    child: _theState.rebuilder(() {
+                      return widget.menuItembuilder != null
+                          ? widget.menuItembuilder!(x)
+                          : _SelectRow(
+                              selected: widget.selectedValues.contains(x),
+                              text: x,
+                              onChange: (isSelected) {
+                                if (isSelected) {
+                                  var ns = widget.selectedValues;
+                                  ns.add(x);
+                                  widget.onChanged(ns);
+                                } else {
+                                  var ns = widget.selectedValues;
+                                  ns.remove(x);
+                                  widget.onChanged(ns);
+                                }
+                              },
+                            );
+                    }),
+                    value: x,
+                    onTap: () {
+                      if (widget.selectedValues.contains(x)) {
+                        var ns = widget.selectedValues;
+                        ns.remove(x);
+                        widget.onChanged(ns);
+                      } else {
+                        var ns = widget.selectedValues;
+                        ns.add(x);
+                        widget.onChanged(ns);
+                      }
+                    },
+                  ))
+              .toList(),
+        ),
       ),
     );
   }
