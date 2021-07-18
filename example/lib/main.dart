@@ -33,7 +33,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Padding(
+      child: Container(
+        width: 100,
         padding: const EdgeInsets.all(20.0),
         child: DropDownMultiSelect(
           onChanged: (List<String> x) {
@@ -41,7 +42,12 @@ class _HomeState extends State<Home> {
               selected = x;
             });
           },
-          options: ['a', 'b', 'c', 'd'],
+          options: [
+            'aghfchgfch',
+            'bfghfgghfhhj',
+            'cbkjhkhbjkgb',
+            'djghhjghjvhgf'
+          ],
           selectedValues: selected,
           whenEmpty: 'Select Something',
           decoration: InputDecoration(
