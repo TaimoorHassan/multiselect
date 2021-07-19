@@ -40,13 +40,13 @@ class _SelectRow extends StatelessWidget {
 ///
 class DropDownMultiSelect extends StatefulWidget {
   /// The options form which a user can select
-  final List<String> options;
+  final List<dynamic> options;
 
   /// Selected Values
-  final List<String> selectedValues;
+  final List<dynamic> selectedValues;
 
   /// This function is called whenever a value changes
-  final Function(List<String>) onChanged;
+  final Function(List<dynamic>) onChanged;
 
   /// defines whether the field is dense
   final bool isDense;
@@ -61,10 +61,10 @@ class DropDownMultiSelect extends StatefulWidget {
   final String? whenEmpty;
 
   /// a function to build custom childern
-  final Widget Function(List<String> selectedValues)? childBuilder;
+  final Widget Function(List<dynamic> selectedValues)? childBuilder;
 
   /// a function to build custom menu items
-  final Widget Function(String option)? menuItembuilder;
+  final Widget Function(dynamic option)? menuItembuilder;
 
   const DropDownMultiSelect({
     Key? key,
@@ -97,12 +97,14 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                           EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                       child: Text(widget.selectedValues.length > 0
                           ? widget.selectedValues
-                              .reduce((a, b) => a + ' , ' + b)
+                              .reduce(
+                                  (a, b) => a.toString() + ' , ' + b.toString())
+                              .toString()
                           : widget.whenEmpty ?? '')),
                   alignment: Alignment.centerLeft)),
           Align(
             alignment: Alignment.centerLeft,
-            child: DropdownButtonFormField<String>(
+            child: DropdownButtonFormField<dynamic>(
               decoration: widget.decoration != null
                   ? widget.decoration
                   : InputDecoration(
@@ -130,7 +132,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                               ? widget.menuItembuilder!(x)
                               : _SelectRow(
                                   selected: widget.selectedValues.contains(x),
-                                  text: x,
+                                  text: x.toString(),
                                   onChange: (isSelected) {
                                     if (isSelected) {
                                       var ns = widget.selectedValues;

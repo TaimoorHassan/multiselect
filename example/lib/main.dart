@@ -27,8 +27,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-  List<String> selected = [];
+  List<dynamic> selected = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +36,40 @@ class _HomeState extends State<Home> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: DropDownMultiSelect(
-          onChanged: (List<String> x) {
-            setState(() {
-              selected =x;
-            });
+          onChanged: (List<dynamic> x) {
+            print(x);
           },
-          options: ['a' , 'b' , 'c' , 'd'],
+          options: [new TestClass("a", 1), new TestClass("b", 2), "c", "d"],
           selectedValues: selected,
           whenEmpty: 'Select Something',
         ),
       ),
     ));
   }
+}
+
+class TestClass {
+  final String caption;
+  final int value;
+
+  TestClass(this.caption, this.value);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return this.caption;
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other is TestClass) {
+      return other.value == value;
+    }
+
+    return false;
+  }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
 }
