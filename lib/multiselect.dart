@@ -157,6 +157,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                             ns.add(x);
                             widget.onChanged(ns);
                           }
+                          _theState.notify();
                         },
                       ))
                   .toList(),
