@@ -18,6 +18,7 @@ class _SelectRow extends StatelessWidget {
       required this.selected,
       required this.text})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -78,6 +79,7 @@ class DropDownMultiSelect extends StatefulWidget {
     this.enabled = true,
     this.decoration,
   }) : super(key: key);
+
   @override
   _DropDownMultiSelectState createState() => _DropDownMultiSelectState();
 }
@@ -115,7 +117,9 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                     ),
               isDense: true,
               onChanged: widget.enabled ? (x) {} : null,
-              value: null,
+              value: widget.selectedValues.length > 0
+                  ? widget.selectedValues[0]
+                  : null,
               selectedItemBuilder: (context) {
                 return widget.options
                     .map((e) => DropdownMenuItem(
