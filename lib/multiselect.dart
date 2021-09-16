@@ -67,6 +67,12 @@ class DropDownMultiSelect extends StatefulWidget {
   /// a function to build custom menu items
   final Widget Function(String option)? menuItembuilder;
 
+  /// a function to validate
+  final String Function(String? selectedOptions)? validator;
+
+  /// defines whether the widget is read-only
+  final bool readOnly;
+
   const DropDownMultiSelect({
     Key? key,
     required this.options,
@@ -78,6 +84,8 @@ class DropDownMultiSelect extends StatefulWidget {
     this.isDense = false,
     this.enabled = true,
     this.decoration,
+    this.validator,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -105,6 +113,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
           Align(
             alignment: Alignment.centerLeft,
             child: DropdownButtonFormField<String>(
+              validator: widget.validator != null ? widget.validator : null,
               decoration: widget.decoration != null
                   ? widget.decoration
                   : InputDecoration(
@@ -149,17 +158,19 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                                 );
                         }),
                         value: x,
-                        onTap: () {
-                          if (widget.selectedValues.contains(x)) {
-                            var ns = widget.selectedValues;
-                            ns.remove(x);
-                            widget.onChanged(ns);
-                          } else {
-                            var ns = widget.selectedValues;
-                            ns.add(x);
-                            widget.onChanged(ns);
-                          }
-                        },
+                        onTap: !widget.readOnly
+                            ? () {
+                                if (widget.selectedValues.contains(x)) {
+                                  var ns = widget.selectedValues;
+                                  ns.remove(x);
+                                  widget.onChanged(ns);
+                                } else {
+                                  var ns = widget.selectedValues;
+                                  ns.add(x);
+                                  widget.onChanged(ns);
+                                }
+                              }
+                            : null,
                       ))
                   .toList(),
             ),
