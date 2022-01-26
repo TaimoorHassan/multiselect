@@ -1,3 +1,4 @@
+import 'package:example/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 
@@ -14,21 +15,27 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: Home(
+        users: User.generateRandomUser,
+      ),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({
+    Key? key,
+    required this.users,
+  }) : super(key: key);
+
+  final List<User> users;
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
-  List<String> selected = [];
+  List<User> selected = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +44,15 @@ class _HomeState extends State<Home> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: DropDownMultiSelect(
-          onChanged: (List<String> x) {
+          menuItembuilder: (user) => Text(user!.name),
+          onChanged: (List x) {
             setState(() {
-              selected =x;
+              selected = x as List<User>;
             });
           },
-          options: ['a' , 'b' , 'c' , 'd'],
+          options: widget.users,
           selectedValues: selected,
-          whenEmpty: 'Select Something',
+          whenEmpty: 'No users selected yet',
         ),
       ),
     ));
