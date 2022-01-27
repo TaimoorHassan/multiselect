@@ -72,6 +72,8 @@ class DropDownMultiSelect extends StatefulWidget {
   /// defines whether the widget is read-only
   final bool readOnly;
 
+  final double height;
+
   const DropDownMultiSelect({
     Key? key,
     required this.options,
@@ -85,6 +87,7 @@ class DropDownMultiSelect extends StatefulWidget {
     this.decoration,
     this.validator,
     this.readOnly = false,
+    this.height = 100,
   }) : super(key: key);
 
   @override
@@ -95,7 +98,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: widget.height,
       child: Stack(
         children: [
           _theState.rebuilder(
