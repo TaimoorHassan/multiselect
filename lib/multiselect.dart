@@ -99,7 +99,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
       height: 100,
       child: Stack(
         children: [
-          _theState.rebuilder(() => widget.childBuilder != null
+          _theState.rebuild(() => widget.childBuilder != null
               ? widget.childBuilder!(widget.selectedValues)
               : Align(
                   child: Padding(
@@ -138,7 +138,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
               },
               items: widget.options
                   .map((x) => DropdownMenuItem(
-                        child: _theState.rebuilder(() {
+                        child: _theState.rebuild(() {
                           return widget.menuItembuilder != null
                               ? widget.menuItembuilder!(x)
                               : _SelectRow(
