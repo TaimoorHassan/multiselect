@@ -73,15 +73,27 @@ class DropDownMultiSelect extends StatefulWidget {
   /// defines whether the widget is read-only
   final bool readOnly;
 
+  /// icon shown on the right side of the field 
+  final Widget? icon;
+
+  /// Textstyle for the hint
+  final TextStyle? hintStyle;
+
+  /// hint to be shown when there's nothing else to be shown
+  final Widget? hint;
+
   const DropDownMultiSelect({
     Key? key,
     required this.options,
     required this.selectedValues,
     required this.onChanged,
-    required this.whenEmpty,
+    this.whenEmpty,
+    this.icon,
+    this.hint,
+    this.hintStyle,
     this.childBuilder,
     this.menuItembuilder,
-    this.isDense = false,
+    this.isDense = true,
     this.enabled = true,
     this.decoration,
     this.validator,
@@ -96,23 +108,27 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
       child: Stack(
+        alignment: Alignment.centerLeft,
         children: [
           _theState.rebuild(() => widget.childBuilder != null
               ? widget.childBuilder!(widget.selectedValues)
-              : Align(
+              : Padding(
+                  padding:
+                      widget.decoration !=null ? widget.decoration!.contentPadding !=null ? widget.decoration!.contentPadding! : EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.symmetric(horizontal: 10),
                   child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      child: Text(widget.selectedValues.length > 0
-                          ? widget.selectedValues
-                              .reduce((a, b) => a + ' , ' + b)
-                          : widget.whenEmpty ?? '')),
-                  alignment: Alignment.centerLeft)),
-          Align(
-            alignment: Alignment.centerLeft,
+                    
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(widget.selectedValues.length > 0
+                        ? widget.selectedValues
+                            .reduce((a, b) => a + ' , ' + b)
+                        : widget.whenEmpty ?? ''),
+                  ))),
+          Container(
             child: DropdownButtonFormField<String>(
+              hint: widget.hint,
+              style: widget.hintStyle,
+              icon: widget.icon,
               validator: widget.validator != null ? widget.validator : null,
               decoration: widget.decoration != null
                   ? widget.decoration
@@ -124,7 +140,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                         horizontal: 10,
                       ),
                     ),
-              isDense: true,
+              isDense: widget.isDense,
               onChanged: widget.enabled ? (x) {} : null,
               value: widget.selectedValues.length > 0
                   ? widget.selectedValues[0]
