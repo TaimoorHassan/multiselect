@@ -1,3 +1,10 @@
+# 0.0.6
+* depreceating when empty in favor of hint widget
+* accepting hint TextStyle
+* isDense is true by default
+* removed height bound
+* accepting icon as a parameter
+
 ## 0.0.5
 * Updated dependencies
 
