@@ -1,3 +1,7 @@
+# 0.0.7
+* tap does not close the pop-up automatically now.
+
+
 # 0.0.6
 * depreceating when empty in favor of hint widget
 * accepting hint TextStyle

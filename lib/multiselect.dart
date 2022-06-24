@@ -21,16 +21,25 @@ class _SelectRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-            value: selected,
-            onChanged: (x) {
-              onChange(x!);
-              _theState.notify();
-            }),
-        Text(text)
-      ],
+    return InkWell(
+      onTap: (){
+        onChange(!selected);
+        _theState.notify();
+      },
+      child: Container(
+        height: kMinInteractiveDimension,
+        child: Row(
+          children: [
+            Checkbox(
+                value: selected,
+                onChanged: (x) {
+                  onChange(x!);
+                  _theState.notify();
+                }),
+            Text(text)
+          ],
+        ),
+      ),
     );
   }
 }
@@ -125,70 +134,77 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                         : widget.whenEmpty ?? ''),
                   ))),
           Container(
-            child: DropdownButtonFormField<String>(
-              hint: widget.hint,
-              style: widget.hintStyle,
-              icon: widget.icon,
-              validator: widget.validator != null ? widget.validator : null,
-              decoration: widget.decoration != null
-                  ? widget.decoration
-                  : InputDecoration(
-                      border: OutlineInputBorder(),
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 10,
+            child: Theme(
+              data: Theme.of(context).copyWith(),
+              child: DropdownButtonFormField<String>(
+                
+                hint: widget.hint,
+                style: widget.hintStyle,
+                
+                icon: widget.icon,
+                validator: widget.validator != null ? widget.validator : null,
+                decoration: widget.decoration != null
+                    ? widget.decoration
+                    : InputDecoration(
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 10,
+                        ),
                       ),
-                    ),
-              isDense: widget.isDense,
-              onChanged: widget.enabled ? (x) {} : null,
-              value: widget.selectedValues.length > 0
-                  ? widget.selectedValues[0]
-                  : null,
-              selectedItemBuilder: (context) {
-                return widget.options
-                    .map((e) => DropdownMenuItem(
-                          child: Container(),
-                        ))
-                    .toList();
-              },
-              items: widget.options
-                  .map((x) => DropdownMenuItem(
-                        child: _theState.rebuild(() {
-                          return widget.menuItembuilder != null
-                              ? widget.menuItembuilder!(x)
-                              : _SelectRow(
-                                  selected: widget.selectedValues.contains(x),
-                                  text: x,
-                                  onChange: (isSelected) {
-                                    if (isSelected) {
-                                      var ns = widget.selectedValues;
-                                      ns.add(x);
-                                      widget.onChanged(ns);
-                                    } else {
-                                      var ns = widget.selectedValues;
-                                      ns.remove(x);
-                                      widget.onChanged(ns);
-                                    }
-                                  },
-                                );
-                        }),
-                        value: x,
-                        onTap: !widget.readOnly
-                            ? () {
-                                if (widget.selectedValues.contains(x)) {
-                                  var ns = widget.selectedValues;
-                                  ns.remove(x);
-                                  widget.onChanged(ns);
-                                } else {
-                                  var ns = widget.selectedValues;
-                                  ns.add(x);
-                                  widget.onChanged(ns);
+                isDense: widget.isDense,
+                onChanged: widget.enabled ? (x) {} : null,
+                isExpanded: false,
+                value: widget.selectedValues.length > 0
+                    ? widget.selectedValues[0]
+                    : null,
+                selectedItemBuilder: (context) {
+                  return widget.options
+                      .map((e) => DropdownMenuItem(
+                            child: Container(),
+                          ))
+                      .toList();
+                },
+                items: widget.options
+                    .map((x) => DropdownMenuItem(
+                          child: _theState.rebuild(() {
+                            return widget.menuItembuilder != null
+                                ? widget.menuItembuilder!(x)
+                                : _SelectRow(
+                                    selected: widget.selectedValues.contains(x),
+                                    text: x,
+                                    onChange: (isSelected) {
+                                      if (isSelected) {
+                                        var ns = widget.selectedValues;
+                                        ns.add(x);
+                                        widget.onChanged(ns);
+                                      } else {
+                                        var ns = widget.selectedValues;
+                                        ns.remove(x);
+                                        widget.onChanged(ns);
+                                      }
+                                    },
+                                  );
+                          }),
+                          value: x,
+                          onTap: !widget.readOnly
+                              ? () {
+                                  if (widget.selectedValues.contains(x)) {
+                                    var ns = widget.selectedValues;
+                                    ns.remove(x);
+                                    widget.onChanged(ns);
+                                  } else {
+                                    var ns = widget.selectedValues;
+                                    ns.add(x);
+                                    widget.onChanged(ns);
+                                  }
                                 }
-                              }
-                            : null,
-                      ))
-                  .toList(),
+                              : null,
+                        ),
+                        )
+                    .toList(),
+              ),
             ),
           ),
         ],
