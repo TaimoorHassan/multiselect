@@ -82,6 +82,9 @@ class DropDownMultiSelect extends StatefulWidget {
   /// defines whether the widget is read-only
   final bool readOnly;
 
+  /// defines whether the dropdown is expandable
+  final bool isExpanded;
+
   /// icon shown on the right side of the field 
   final Widget? icon;
 
@@ -107,6 +110,7 @@ class DropDownMultiSelect extends StatefulWidget {
     this.decoration,
     this.validator,
     this.readOnly = false,
+    this.isExpanded = false,
   }) : super(key: key);
 
   @override
@@ -155,7 +159,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                       ),
                 isDense: widget.isDense,
                 onChanged: widget.enabled ? (x) {} : null,
-                isExpanded: false,
+                isExpanded: widget.isExpanded,
                 value: widget.selectedValues.length > 0
                     ? widget.selectedValues[0]
                     : null,
