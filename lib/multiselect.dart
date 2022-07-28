@@ -36,7 +36,7 @@ class _SelectRow extends StatelessWidget {
                   onChange(x!);
                   _theState.notify();
                 }),
-            Text(text)
+            Text(text, maxLines: 1, overflow: TextOverflow.fade)
           ],
         ),
       ),
