@@ -90,6 +90,9 @@ class DropDownMultiSelect extends StatefulWidget {
 
   /// hint to be shown when there's nothing else to be shown
   final Widget? hint;
+   
+  /// maximum height of the list of options
+  final double? menuMaxHeight;
 
   const DropDownMultiSelect({
     Key? key,
@@ -107,6 +110,7 @@ class DropDownMultiSelect extends StatefulWidget {
     this.decoration,
     this.validator,
     this.readOnly = false,
+    this.menuMaxHeight,
   }) : super(key: key);
 
   @override
@@ -154,6 +158,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                         ),
                       ),
                 isDense: widget.isDense,
+                menuMaxHeight: widget.menuMaxHeight,
                 onChanged: widget.enabled ? (x) {} : null,
                 isExpanded: false,
                 value: widget.selectedValues.length > 0
