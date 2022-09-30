@@ -1,5 +1,6 @@
 library multiselect;
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
@@ -17,9 +18,10 @@ class SelectItem {
   });
 
   factory SelectItem.fromJson(item) {
+    var json = jsonDecode(item);
     return SelectItem(
       text: item['text'],
-      enabled: item['enabled'],
+      enabled: json.containsKey('enabled') ? item['enabled'] : true,
     );
   }
 }
