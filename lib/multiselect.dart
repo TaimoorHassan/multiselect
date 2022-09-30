@@ -30,13 +30,15 @@ class _SelectRow extends StatelessWidget {
   final Function(bool) onChange;
   final bool selected;
   final String text;
+  final bool enabled;
 
-  const _SelectRow(
-      {Key key,
-      @required this.onChange,
-      @required this.selected,
-      @required this.text})
-      : super(key: key);
+  const _SelectRow({
+    Key key,
+    @required this.onChange,
+    @required this.selected,
+    @required this.text,
+    this.enabled = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +52,22 @@ class _SelectRow extends StatelessWidget {
         child: Row(
           children: [
             Checkbox(
-                value: selected,
-                onChanged: (x) {
-                  onChange(x);
-                  _theState.notify();
-                }),
-            Text(text)
+              value: selected,
+              onChanged: enabled
+                  ? (x) {
+                      onChange(x);
+                      _theState.notify();
+                    }
+                  : null,
+            ),
+            Text(
+              text,
+              style: !enabled
+                  ? TextStyle(
+                      color: Colors.grey[400],
+                    )
+                  : null,
+            )
           ],
         ),
       ),
@@ -195,6 +207,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                                   selected:
                                       widget.selectedValues.contains(x.text),
                                   text: x.text,
+                                  enabled: x.enabled,
                                   onChange: (isSelected) {
                                     if (isSelected) {
                                       var ns = widget.selectedValues;
