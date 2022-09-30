@@ -27,7 +27,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   List<String> selected = [];
 
   @override
@@ -39,10 +38,12 @@ class _HomeState extends State<Home> {
         child: DropDownMultiSelect(
           onChanged: (List<String> x) {
             setState(() {
-              selected =x;
+              selected = x;
             });
           },
-          options: ['a' , 'b' , 'c' , 'd'],
+          options: ['a', 'b', 'c', 'd']
+              .map((x) => SelectItem.fromJson({'text': x}))
+              .toList(),
           selectedValues: selected,
           whenEmpty: 'Select Something',
         ),

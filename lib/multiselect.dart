@@ -12,7 +12,7 @@ class SelectItem {
   bool enabled;
 
   SelectItem({
-    required this.text,
+    @required this.text,
     this.enabled = true,
   });
 
@@ -30,10 +30,10 @@ class _SelectRow extends StatelessWidget {
   final String text;
 
   const _SelectRow(
-      {Key? key,
-      required this.onChange,
-      required this.selected,
-      required this.text})
+      {Key key,
+      @required this.onChange,
+      @required this.selected,
+      @required this.text})
       : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class _SelectRow extends StatelessWidget {
             Checkbox(
                 value: selected,
                 onChanged: (x) {
-                  onChange(x!);
+                  onChange(x);
                   _theState.notify();
                 }),
             Text(text)
@@ -82,37 +82,37 @@ class DropDownMultiSelect extends StatefulWidget {
   final bool enabled;
 
   /// Input decoration
-  final InputDecoration? decoration;
+  final InputDecoration decoration;
 
   /// this text is shown when there is no selection
-  final String? whenEmpty;
+  final String whenEmpty;
 
   /// a function to build custom childern
-  final Widget Function(List<String> selectedValues)? childBuilder;
+  final Widget Function(List<String> selectedValues) childBuilder;
 
   /// a function to build custom menu items
-  final Widget Function(String option)? menuItembuilder;
+  final Widget Function(String option) menuItembuilder;
 
   /// a function to validate
-  final String Function(String? selectedOptions)? validator;
+  final String Function(String selectedOptions) validator;
 
   /// defines whether the widget is read-only
   final bool readOnly;
 
   /// icon shown on the right side of the field
-  final Widget? icon;
+  final Widget icon;
 
   /// Textstyle for the hint
-  final TextStyle? hintStyle;
+  final TextStyle hintStyle;
 
   /// hint to be shown when there's nothing else to be shown
-  final Widget? hint;
+  final Widget hint;
 
   const DropDownMultiSelect({
-    Key? key,
-    required this.options,
-    required this.selectedValues,
-    required this.onChanged,
+    Key key,
+    @required this.options,
+    @required this.selectedValues,
+    @required this.onChanged,
     this.whenEmpty,
     this.icon,
     this.hint,
@@ -138,11 +138,11 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
         alignment: Alignment.centerLeft,
         children: [
           _theState.rebuild(() => widget.childBuilder != null
-              ? widget.childBuilder!(widget.selectedValues)
+              ? widget.childBuilder(widget.selectedValues)
               : Padding(
                   padding: widget.decoration != null
-                      ? widget.decoration!.contentPadding != null
-                          ? widget.decoration!.contentPadding!
+                      ? widget.decoration.contentPadding != null
+                          ? widget.decoration.contentPadding
                           : EdgeInsets.symmetric(horizontal: 10)
                       : EdgeInsets.symmetric(horizontal: 10),
                   child: Padding(
@@ -188,7 +188,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                         enabled: x.enabled,
                         child: _theState.rebuild(() {
                           return widget.menuItembuilder != null
-                              ? widget.menuItembuilder!(x.text)
+                              ? widget.menuItembuilder(x.text)
                               : _SelectRow(
                                   selected:
                                       widget.selectedValues.contains(x.text),

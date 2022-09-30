@@ -4,7 +4,7 @@ version: 0.0.7
 homepage: https://github.com/TaimoorHassan/multiselect
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.11.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
