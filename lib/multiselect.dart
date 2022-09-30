@@ -7,6 +7,23 @@ class _TheState {}
 
 var _theState = RM.inject(() => _TheState());
 
+class SelectItem {
+  String text;
+  bool enabled;
+
+  SelectItem({
+    required this.text,
+    this.enabled = true,
+  });
+
+  factory SelectItem.fromJson(item) {
+    return SelectItem(
+      text: item['text'],
+      enabled: item['enabled'],
+    );
+  }
+}
+
 class _SelectRow extends StatelessWidget {
   final Function(bool) onChange;
   final bool selected;
@@ -22,7 +39,7 @@ class _SelectRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         onChange(!selected);
         _theState.notify();
       },
@@ -50,7 +67,7 @@ class _SelectRow extends StatelessWidget {
 ///
 class DropDownMultiSelect extends StatefulWidget {
   /// The options form which a user can select
-  final List<String> options;
+  final List<SelectItem> options;
 
   /// Selected Values
   final List<String> selectedValues;
@@ -82,7 +99,7 @@ class DropDownMultiSelect extends StatefulWidget {
   /// defines whether the widget is read-only
   final bool readOnly;
 
-  /// icon shown on the right side of the field 
+  /// icon shown on the right side of the field
   final Widget? icon;
 
   /// Textstyle for the hint
@@ -123,24 +140,23 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
           _theState.rebuild(() => widget.childBuilder != null
               ? widget.childBuilder!(widget.selectedValues)
               : Padding(
-                  padding:
-                      widget.decoration !=null ? widget.decoration!.contentPadding !=null ? widget.decoration!.contentPadding! : EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.symmetric(horizontal: 10),
+                  padding: widget.decoration != null
+                      ? widget.decoration!.contentPadding != null
+                          ? widget.decoration!.contentPadding!
+                          : EdgeInsets.symmetric(horizontal: 10)
+                      : EdgeInsets.symmetric(horizontal: 10),
                   child: Padding(
-                    
                     padding: const EdgeInsets.only(right: 20),
                     child: Text(widget.selectedValues.length > 0
-                        ? widget.selectedValues
-                            .reduce((a, b) => a + ' , ' + b)
+                        ? widget.selectedValues.reduce((a, b) => a + ' , ' + b)
                         : widget.whenEmpty ?? ''),
                   ))),
           Container(
             child: Theme(
               data: Theme.of(context).copyWith(),
               child: DropdownButtonFormField<String>(
-                
                 hint: widget.hint,
                 style: widget.hintStyle,
-                
                 icon: widget.icon,
                 validator: widget.validator != null ? widget.validator : null,
                 decoration: widget.decoration != null
@@ -167,42 +183,45 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                       .toList();
                 },
                 items: widget.options
-                    .map((x) => DropdownMenuItem(
-                          child: _theState.rebuild(() {
-                            return widget.menuItembuilder != null
-                                ? widget.menuItembuilder!(x)
-                                : _SelectRow(
-                                    selected: widget.selectedValues.contains(x),
-                                    text: x,
-                                    onChange: (isSelected) {
-                                      if (isSelected) {
-                                        var ns = widget.selectedValues;
-                                        ns.add(x);
-                                        widget.onChanged(ns);
-                                      } else {
-                                        var ns = widget.selectedValues;
-                                        ns.remove(x);
-                                        widget.onChanged(ns);
-                                      }
-                                    },
-                                  );
-                          }),
-                          value: x,
-                          onTap: !widget.readOnly
-                              ? () {
-                                  if (widget.selectedValues.contains(x)) {
-                                    var ns = widget.selectedValues;
-                                    ns.remove(x);
-                                    widget.onChanged(ns);
-                                  } else {
-                                    var ns = widget.selectedValues;
-                                    ns.add(x);
-                                    widget.onChanged(ns);
-                                  }
+                    .map(
+                      (x) => DropdownMenuItem(
+                        enabled: x.enabled,
+                        child: _theState.rebuild(() {
+                          return widget.menuItembuilder != null
+                              ? widget.menuItembuilder!(x.text)
+                              : _SelectRow(
+                                  selected:
+                                      widget.selectedValues.contains(x.text),
+                                  text: x.text,
+                                  onChange: (isSelected) {
+                                    if (isSelected) {
+                                      var ns = widget.selectedValues;
+                                      ns.add(x.text);
+                                      widget.onChanged(ns);
+                                    } else {
+                                      var ns = widget.selectedValues;
+                                      ns.remove(x.text);
+                                      widget.onChanged(ns);
+                                    }
+                                  },
+                                );
+                        }),
+                        value: x.text,
+                        onTap: !widget.readOnly
+                            ? () {
+                                if (widget.selectedValues.contains(x.text)) {
+                                  var ns = widget.selectedValues;
+                                  ns.remove(x.text);
+                                  widget.onChanged(ns);
+                                } else {
+                                  var ns = widget.selectedValues;
+                                  ns.add(x.text);
+                                  widget.onChanged(ns);
                                 }
-                              : null,
-                        ),
-                        )
+                              }
+                            : null,
+                      ),
+                    )
                     .toList(),
               ),
             ),
