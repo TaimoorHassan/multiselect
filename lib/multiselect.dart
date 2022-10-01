@@ -37,7 +37,7 @@ class _SelectRow extends StatelessWidget {
     @required this.onChange,
     @required this.selected,
     @required this.text,
-    this.enabled = true,
+    this.enabled,
   }) : super(key: key);
 
   @override
@@ -53,19 +53,23 @@ class _SelectRow extends StatelessWidget {
           children: [
             Checkbox(
               value: selected,
-              onChanged: enabled
-                  ? (x) {
-                      onChange(x);
-                      _theState.notify();
-                    }
+              onChanged: enabled != null
+                  ? (enabled
+                      ? (x) {
+                          onChange(x);
+                          _theState.notify();
+                        }
+                      : null)
                   : null,
             ),
             Text(
               text,
-              style: !enabled
-                  ? TextStyle(
-                      color: Colors.grey[400],
-                    )
+              style: enabled != null
+                  ? (!enabled
+                      ? TextStyle(
+                          color: Colors.grey[400],
+                        )
+                      : null)
                   : null,
             )
           ],
