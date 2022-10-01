@@ -18,10 +18,10 @@ class SelectItem {
   });
 
   factory SelectItem.fromJson(item) {
-    var json = jsonDecode(item);
+    // var json = jsonDecode(item);
     return SelectItem(
       text: item['text'],
-      enabled: json.containsKey('enabled') ? item['enabled'] : true,
+      enabled: item['enabled'],
     );
   }
 
