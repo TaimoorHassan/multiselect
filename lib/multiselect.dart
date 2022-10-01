@@ -24,6 +24,11 @@ class SelectItem {
       enabled: json.containsKey('enabled') ? item['enabled'] : true,
     );
   }
+
+  @override
+  String toString() {
+    return '{ text: $text, enabled: $enabled }';
+  }
 }
 
 class _SelectRow extends StatelessWidget {
