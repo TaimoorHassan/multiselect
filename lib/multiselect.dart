@@ -25,6 +25,10 @@ class SelectItem {
     );
   }
 
+  testFunction() {
+    return 'working';
+  }
+
   @override
   String toString() {
     return '{ text: $text, enabled: $enabled }';
