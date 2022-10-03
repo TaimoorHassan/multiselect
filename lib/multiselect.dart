@@ -20,8 +20,8 @@ class SelectItem {
   factory SelectItem.fromJson(item) {
     // var json = jsonDecode(item);
     return SelectItem(
-      text: item['text'],
-      enabled: item['enabled'],
+      text: item.text,
+      enabled: item.enabled,
     );
   }
 
