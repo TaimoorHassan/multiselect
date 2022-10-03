@@ -20,13 +20,17 @@ class SelectItem {
   factory SelectItem.fromJson(item) {
     // var json = jsonDecode(item);
     return SelectItem(
-      text: item.text,
-      enabled: item.enabled,
+      text: item['text'],
+      enabled: item['enabled'],
     );
   }
 
-  testFunction() {
-    return 'working';
+  factory SelectItem.from(item) {
+    // var json = jsonDecode(item);
+    return SelectItem(
+      text: item.text,
+      enabled: item.enabled,
+    );
   }
 
   @override
