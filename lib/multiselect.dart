@@ -14,7 +14,7 @@ class SelectItem {
 
   SelectItem({
     @required this.text,
-    this.enabled = true,
+    @required this.enabled,
   });
 
   factory SelectItem.fromJson(item) {
@@ -52,33 +52,31 @@ class _SelectRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        onChange(!selected);
-        _theState.notify();
-      },
+      onTap: enabled
+          ? () {
+              onChange(!selected);
+              _theState.notify();
+            }
+          : null,
       child: Container(
         height: kMinInteractiveDimension,
         child: Row(
           children: [
             Checkbox(
               value: selected,
-              onChanged: enabled != null
-                  ? (enabled
-                      ? (x) {
-                          onChange(x);
-                          _theState.notify();
-                        }
-                      : null)
+              onChanged: enabled
+                  ? (x) {
+                      onChange(x);
+                      _theState.notify();
+                    }
                   : null,
             ),
             Text(
               text,
-              style: enabled != null
-                  ? (!enabled
-                      ? TextStyle(
-                          color: Colors.grey[400],
-                        )
-                      : null)
+              style: !enabled
+                  ? TextStyle(
+                      color: Colors.grey[400],
+                    )
                   : null,
             )
           ],
@@ -235,7 +233,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                                 );
                         }),
                         value: x.text,
-                        onTap: !widget.readOnly
+                        onTap: !widget.readOnly || x.enabled
                             ? () {
                                 if (widget.selectedValues.contains(x.text)) {
                                   var ns = widget.selectedValues;
