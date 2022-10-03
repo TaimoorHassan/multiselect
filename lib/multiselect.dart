@@ -18,7 +18,6 @@ class SelectItem {
   });
 
   factory SelectItem.fromJson(item) {
-    // var json = jsonDecode(item);
     return SelectItem(
       text: item['text'],
       enabled: item['enabled'],
@@ -26,7 +25,6 @@ class SelectItem {
   }
 
   factory SelectItem.from(item) {
-    // var json = jsonDecode(item);
     return SelectItem(
       text: item.text,
       enabled: item.enabled,
