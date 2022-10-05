@@ -1,6 +1,5 @@
 library multiselect;
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
@@ -14,9 +13,10 @@ class SelectItem {
 
   SelectItem({
     @required this.text,
-    @required this.enabled,
+    this.enabled = true,
   });
 
+  // for creating SelectItem from json
   factory SelectItem.fromJson(item) {
     return SelectItem(
       text: item['text'],
@@ -24,6 +24,7 @@ class SelectItem {
     );
   }
 
+  // for cloning
   factory SelectItem.from(item) {
     return SelectItem(
       text: item.text,
