@@ -19,8 +19,8 @@ class SelectItem {
   // for creating SelectItem from json
   factory SelectItem.fromJson(item) {
     return SelectItem(
-      text: item['text'],
-      enabled: item['enabled'],
+      text: item['text'] as String,
+      enabled: item['enabled'] as bool,
     );
   }
 
