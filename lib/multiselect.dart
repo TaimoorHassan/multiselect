@@ -19,8 +19,8 @@ class SelectItem {
   // for creating SelectItem from json
   factory SelectItem.fromJson(item) {
     return SelectItem(
-      text: item['text'] as String,
-      enabled: item['enabled'] as bool,
+      text: item['text'],
+      enabled: item['enabled'] ?? true,
     );
   }
 
@@ -28,7 +28,7 @@ class SelectItem {
   factory SelectItem.from(item) {
     return SelectItem(
       text: item.text,
-      enabled: item.enabled,
+      enabled: item.enabled ?? true,
     );
   }
 
@@ -210,48 +210,49 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                           ))
                       .toList();
                 },
-                items: widget.options
-                    .map(
-                      (x) => DropdownMenuItem(
-                        enabled: x.enabled,
-                        child: _theState.rebuild(() {
-                          return widget.menuItembuilder != null
-                              ? widget.menuItembuilder(x.text)
-                              : _SelectRow(
-                                  selected:
-                                      widget.selectedValues.contains(x.text),
-                                  text: x.text,
-                                  enabled: x.enabled,
-                                  onChange: (isSelected) {
-                                    if (isSelected) {
-                                      var ns = widget.selectedValues;
-                                      ns.add(x.text);
-                                      widget.onChanged(ns);
-                                    } else {
-                                      var ns = widget.selectedValues;
-                                      ns.remove(x.text);
-                                      widget.onChanged(ns);
-                                    }
-                                  },
-                                );
-                        }),
-                        value: x.text,
-                        onTap: !widget.readOnly || x.enabled
-                            ? () {
-                                if (widget.selectedValues.contains(x.text)) {
-                                  var ns = widget.selectedValues;
-                                  ns.remove(x.text);
-                                  widget.onChanged(ns);
-                                } else {
-                                  var ns = widget.selectedValues;
-                                  ns.add(x.text);
-                                  widget.onChanged(ns);
-                                }
+                items: widget.options.map(
+                  (x) {
+                    print('=====x $x');
+                    return DropdownMenuItem(
+                      enabled: x.enabled,
+                      child: _theState.rebuild(() {
+                        return widget.menuItembuilder != null
+                            ? widget.menuItembuilder(x.text)
+                            : _SelectRow(
+                                selected:
+                                    widget.selectedValues.contains(x.text),
+                                text: x.text,
+                                enabled: x.enabled,
+                                onChange: (isSelected) {
+                                  if (isSelected) {
+                                    var ns = widget.selectedValues;
+                                    ns.add(x.text);
+                                    widget.onChanged(ns);
+                                  } else {
+                                    var ns = widget.selectedValues;
+                                    ns.remove(x.text);
+                                    widget.onChanged(ns);
+                                  }
+                                },
+                              );
+                      }),
+                      value: x.text,
+                      onTap: !widget.readOnly || x.enabled
+                          ? () {
+                              if (widget.selectedValues.contains(x.text)) {
+                                var ns = widget.selectedValues;
+                                ns.remove(x.text);
+                                widget.onChanged(ns);
+                              } else {
+                                var ns = widget.selectedValues;
+                                ns.add(x.text);
+                                widget.onChanged(ns);
                               }
-                            : null,
-                      ),
-                    )
-                    .toList(),
+                            }
+                          : null,
+                    );
+                  },
+                ).toList(),
               ),
             ),
           ),
