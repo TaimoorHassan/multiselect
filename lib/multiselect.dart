@@ -91,6 +91,9 @@ class DropDownMultiSelect extends StatefulWidget {
   /// hint to be shown when there's nothing else to be shown
   final Widget? hint;
 
+  /// selectedValue separator
+  final String separator;
+
   const DropDownMultiSelect({
     Key? key,
     required this.options,
@@ -107,6 +110,7 @@ class DropDownMultiSelect extends StatefulWidget {
     this.decoration,
     this.validator,
     this.readOnly = false,
+    this.separator = ' , ',
   }) : super(key: key);
 
   @override
@@ -130,7 +134,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                     padding: const EdgeInsets.only(right: 20),
                     child: Text(widget.selectedValues.length > 0
                         ? widget.selectedValues
-                            .reduce((a, b) => a + ' , ' + b)
+                            .reduce((a, b) => a + widget.separator + b)
                         : widget.whenEmpty ?? ''),
                   ))),
           Container(
