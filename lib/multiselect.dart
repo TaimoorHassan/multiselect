@@ -11,13 +11,15 @@ class _SelectRow extends StatelessWidget {
   final Function(bool) onChange;
   final bool selected;
   final String text;
+  final Color? checkboxColor;
 
-  const _SelectRow(
-      {Key? key,
-      required this.onChange,
-      required this.selected,
-      required this.text})
-      : super(key: key);
+  const _SelectRow({
+    Key? key,
+    required this.onChange,
+    required this.selected,
+    required this.text,
+    this.checkboxColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class _SelectRow extends StatelessWidget {
         child: Row(
           children: [
             Checkbox(
+                activeColor: checkboxColor,
                 value: selected,
                 onChanged: (x) {
                   onChange(x!);
@@ -97,6 +100,9 @@ class DropDownMultiSelect extends StatefulWidget {
   /// hint to be shown when there's nothing else to be shown
   final Widget? hint;
 
+  /// customizate the checkbox active color
+  final Color? checkboxColor;
+
   const DropDownMultiSelect({
     Key? key,
     required this.options,
@@ -113,6 +119,7 @@ class DropDownMultiSelect extends StatefulWidget {
     this.decoration,
     this.validator,
     this.readOnly = false,
+    this.checkboxColor,
   }) : super(key: key);
 
   @override
@@ -180,6 +187,7 @@ class _DropDownMultiSelectState extends State<DropDownMultiSelect> {
                               : _SelectRow(
                                   selected: widget.selectedValues.contains(x),
                                   text: x,
+                                  checkboxColor: widget.checkboxColor,
                                   onChange: (isSelected) {
                                     if (isSelected) {
                                       var ns = widget.selectedValues;
