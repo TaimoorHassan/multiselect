@@ -1,3 +1,6 @@
+# 0.0.8
+* Upgraded states_rebuilder dependency to 6.2.0 to resolve flutter incompatibility
+
 # 0.0.7
 * tapping does not close the popup now
 

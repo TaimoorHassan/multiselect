@@ -1,6 +1,6 @@
 name: multiselect
 description: A simple multiselect dropdown. It provide a concise way to create a Multi Selct ComboBox/SelectBox
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/TaimoorHassan/multiselect
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  states_rebuilder: ^6.0.0
+  states_rebuilder: ^6.2.0
 
 dev_dependencies:
   flutter_test:
