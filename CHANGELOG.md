@@ -1,3 +1,6 @@
+# 0.0.9
+* Added generic type support
+
 # 0.0.8
 * Upgraded states_rebuilder dependency to 6.2.0 to resolve flutter incompatibility
 

@@ -1,6 +1,6 @@
 name: multiselect
 description: A simple multiselect dropdown. It provide a concise way to create a Multi Selct ComboBox/SelectBox
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/TaimoorHassan/multiselect
 
 environment:

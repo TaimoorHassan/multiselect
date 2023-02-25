@@ -26,23 +26,51 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+class Person {
+  String name;
+  String age;
+
+  Person(this.name, this.age);
+}
+
 class _HomeState extends State<Home> {
 
-  List<String> selected = [];
+  var people = [
+    Person('A' , '1'),
+    Person('B' , '2'),
+    Person('C' , '3'),
+    Person('D' , '4'),
+    Person('E' , '5'),
+    Person('F' , '6'),
+    Person('G' , '7'),
+    Person('H' , '8'),
+    Person('I' , '9'),
+    Person('J' , '10'),
+  ];
+
+  List<Person> selected = [];
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        setState(() {
+          
+        });
+      }),
         body: Center(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: DropDownMultiSelect(
-          onChanged: (List<String> x) {
+        // child: SimpleDP<String>(),
+        child: DropDownMultiSelect<Person>(
+          onChanged: ( x) {
             setState(() {
               selected =x;
             });
           },
-          options: ['a' , 'b' , 'c' , 'd'],
+          options: people,
           selectedValues: selected,
           whenEmpty: 'Select Something',
         ),
