@@ -1,4 +1,4 @@
-# 0.0.9
+# 0.1.0
 * Fixed an issue where sometimes selected values were being hidden
 
 # 0.0.9
