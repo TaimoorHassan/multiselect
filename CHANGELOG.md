@@ -1,4 +1,7 @@
 # 0.0.9
+* Fixed an issue where sometimes selected values were being hidden
+
+# 0.0.9
 * Added generic type support
 
 # 0.0.8

@@ -1,22 +1,9 @@
 library multiselect;
 
-import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-extension GlobalKeyExtension on GlobalKey {
-  Rect? get globalPaintBounds {
-    final renderObject = currentContext?.findRenderObject();
-    final translation = renderObject?.getTransformTo(null).getTranslation();
-    if (translation != null && renderObject?.paintBounds != null) {
-      final offset = Offset(translation.x, translation.y);
-      return renderObject!.paintBounds.shift(offset);
-    } else {
-      return null;
-    }
-  }
-}
 
 class _TheState {}
 
@@ -116,6 +103,9 @@ class DropDownMultiSelect<T> extends StatefulWidget {
   /// hint to be shown when there's nothing else to be shown
   final Widget? hint;
 
+  /// style for the selected values
+  final TextStyle? selected_values_style;
+
   const DropDownMultiSelect({
     Key? key,
     required this.options,
@@ -126,6 +116,7 @@ class DropDownMultiSelect<T> extends StatefulWidget {
     this.hint,
     this.hintStyle,
     this.childBuilder,
+    this.selected_values_style,
     this.menuItembuilder,
     this.isDense = true,
     this.enabled = true,
@@ -145,6 +136,75 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
+         
+          Container(
+            child: DropdownButtonFormField<TState>(
+              hint: widget.hint,
+              style: widget.hintStyle,
+              icon: widget.icon,
+              validator: widget.validator != null ? widget.validator : null,
+              decoration: widget.decoration != null
+                  ? widget.decoration
+                  : InputDecoration(
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 10,
+                      ),
+                    ),
+              isDense: widget.isDense,
+              onChanged: widget.enabled ? (x) {} : null,
+              isExpanded: false,
+              value: widget.selectedValues.length > 0 ? widget.selectedValues[0] : null,
+              selectedItemBuilder: (context) {
+                return widget.options
+                    .map((e) => DropdownMenuItem(
+                          child: Container(),
+                        ))
+                    .toList();
+              },
+              items: widget.options
+                  .map(
+                    (x) => DropdownMenuItem<TState>(
+                      child: _theState.rebuild(() {
+                        return widget.menuItembuilder != null
+                            ? widget.menuItembuilder!(x)
+                            : _SelectRow(
+                                selected: widget.selectedValues.contains(x),
+                                text: x.toString(),
+                                onChange: (isSelected) {
+                                  if (isSelected) {
+                                    var ns = widget.selectedValues;
+                                    ns.add(x);
+                                    widget.onChanged(ns);
+                                  } else {
+                                    var ns = widget.selectedValues;
+                                    ns.remove(x);
+                                    widget.onChanged(ns);
+                                  }
+                                },
+                              );
+                      }),
+                      value: x,
+                      onTap: !widget.readOnly
+                          ? () {
+                              if (widget.selectedValues.contains(x)) {
+                                var ns = widget.selectedValues;
+                                ns.remove(x);
+                                widget.onChanged(ns);
+                              } else {
+                                var ns = widget.selectedValues;
+                                ns.add(x);
+                                widget.onChanged(ns);
+                              }
+                            }
+                          : null,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           _theState.rebuild(() => widget.childBuilder != null
               ? widget.childBuilder!(widget.selectedValues)
               : Padding(
@@ -152,82 +212,14 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
                       ? widget.decoration!.contentPadding != null
                           ? widget.decoration!.contentPadding!
                           : EdgeInsets.symmetric(horizontal: 10)
-                      : EdgeInsets.symmetric(horizontal: 10),
+                      : EdgeInsets.symmetric(horizontal: 20),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text(widget.selectedValues.length > 0 ? widget.selectedValues.map((e) => e.toString()).reduce((a, b) => a.toString() + ' , ' + b.toString()) : widget.whenEmpty ?? ''),
+                    child: Text(
+                      widget.selectedValues.length > 0 ? widget.selectedValues.map((e) => e.toString()).reduce((a, b) => a.toString() + ' , ' + b.toString()) : widget.whenEmpty ?? '',
+                      style: widget.selected_values_style,
+                    ),
                   ))),
-          Container(
-            child: Theme(
-              data: Theme.of(context).copyWith(),
-              child: DropdownButtonFormField<TState>(
-                hint: widget.hint,
-                style: widget.hintStyle,
-                icon: widget.icon,
-                validator: widget.validator != null ? widget.validator : null,
-                decoration: widget.decoration != null
-                    ? widget.decoration
-                    : InputDecoration(
-                        border: OutlineInputBorder(),
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 10,
-                        ),
-                      ),
-                isDense: widget.isDense,
-                onChanged: widget.enabled ? (x) {} : null,
-                isExpanded: false,
-                value: widget.selectedValues.length > 0 ? widget.selectedValues[0] : null,
-                selectedItemBuilder: (context) {
-                  return widget.options
-                      .map((e) => DropdownMenuItem(
-                            child: Container(),
-                          ))
-                      .toList();
-                },
-                items: widget.options
-                    .map(
-                      (x) => DropdownMenuItem<TState>(
-                        child: _theState.rebuild(() {
-                          return widget.menuItembuilder != null
-                              ? widget.menuItembuilder!(x)
-                              : _SelectRow(
-                                  selected: widget.selectedValues.contains(x),
-                                  text: x.toString(),
-                                  onChange: (isSelected) {
-                                    if (isSelected) {
-                                      var ns = widget.selectedValues;
-                                      ns.add(x);
-                                      widget.onChanged(ns);
-                                    } else {
-                                      var ns = widget.selectedValues;
-                                      ns.remove(x);
-                                      widget.onChanged(ns);
-                                    }
-                                  },
-                                );
-                        }),
-                        value: x,
-                        onTap: !widget.readOnly
-                            ? () {
-                                if (widget.selectedValues.contains(x)) {
-                                  var ns = widget.selectedValues;
-                                  ns.remove(x);
-                                  widget.onChanged(ns);
-                                } else {
-                                  var ns = widget.selectedValues;
-                                  ns.add(x);
-                                  widget.onChanged(ns);
-                                }
-                              }
-                            : null,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-          ),
         ],
       ),
     );
