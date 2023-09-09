@@ -104,7 +104,7 @@ class DropDownMultiSelect<T> extends StatefulWidget {
   final Widget? hint;
 
   /// style for the selected values
-  final TextStyle? selected_values_style;
+  final TextStyle? selectedValuesStyle;
 
   const DropDownMultiSelect({
     Key? key,
@@ -116,7 +116,7 @@ class DropDownMultiSelect<T> extends StatefulWidget {
     this.hint,
     this.hintStyle,
     this.childBuilder,
-    this.selected_values_style,
+    this.selectedValuesStyle,
     this.menuItembuilder,
     this.isDense = true,
     this.enabled = true,
@@ -217,7 +217,7 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
                     padding: const EdgeInsets.only(right: 20),
                     child: Text(
                       widget.selectedValues.length > 0 ? widget.selectedValues.map((e) => e.toString()).reduce((a, b) => a.toString() + ' , ' + b.toString()) : widget.whenEmpty ?? '',
-                      style: widget.selected_values_style,
+                      style: widget.selectedValuesStyle,
                     ),
                   ))),
         ],
