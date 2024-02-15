@@ -142,7 +142,19 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
               hint: widget.hint,
               style: widget.hintStyle,
               icon: widget.icon,
-              validator: widget.validator != null ? widget.validator : null,
+              // validator: widget.validator != null ? widget.validator : null,
+              validator: widget.validator != null
+    ? (TState? value) {
+        // Check if the value is null or empty
+        if (value == null || (value is Iterable && value.isEmpty)) {
+          return widget.validator!(null);
+        }
+
+        // Call the provided validator function
+        return widget.validator!(value);
+      }
+    : null,
+
               decoration: widget.decoration != null
                   ? widget.decoration
                   : InputDecoration(
