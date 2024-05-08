@@ -103,6 +103,8 @@ class DropDownMultiSelect<T> extends StatefulWidget {
   /// hint to be shown when there's nothing else to be shown
   final Widget? hint;
 
+  /// selectedValue separator
+  final String separator;
   /// style for the selected values
   final TextStyle? selectedValuesStyle;
 
@@ -123,6 +125,7 @@ class DropDownMultiSelect<T> extends StatefulWidget {
     this.decoration,
     this.validator,
     this.readOnly = false,
+    this.separator = ' , ',
   }) : super(key: key);
 
   @override
@@ -136,6 +139,20 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
+          _theState.rebuild(() => widget.childBuilder != null
+              ? widget.childBuilder!(widget.selectedValues)
+              : Padding(
+                  padding:
+                      widget.decoration !=null ? widget.decoration!.contentPadding !=null ? widget.decoration!.contentPadding! : EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.symmetric(horizontal: 10),
+                  child: Padding(
+                    
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(widget.selectedValues.length > 0
+                        ? widget.selectedValues
+                            .reduce((a, b) => a + widget.separator + b)
+                        : widget.whenEmpty ?? ''),
+                  ))),
+
          
           Container(
             child: DropdownButtonFormField<TState>(
