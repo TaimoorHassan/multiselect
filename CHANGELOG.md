@@ -1,3 +1,12 @@
+# 0.1.0
+* Fixed an issue where sometimes selected values were being hidden
+
+# 0.0.9
+* Added generic type support
+
+# 0.0.8
+* Upgraded states_rebuilder dependency to 6.2.0 to resolve flutter incompatibility
+
 # 0.0.7
 * tapping does not close the popup now
 
