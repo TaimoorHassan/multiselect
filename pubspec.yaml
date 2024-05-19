@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  states_rebuilder: ^6.2.0
+  states_rebuilder: ^6.4.0
 
 dev_dependencies:
   flutter_test:
