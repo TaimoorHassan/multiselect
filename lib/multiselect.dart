@@ -1,22 +1,23 @@
 library multiselect;
 
-
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-
+// Private state class (not used directly in the widget)
 class _TheState {}
 
+// Global state variable using StatesRebuilder (for listening to changes)
 var _theState = RM.inject(() => _TheState());
 
+// Inherited widget to wrap the dropdown (unused in this example)
 class RowWrapper extends InheritedWidget {
   final dynamic data;
   final bool Function() shouldNotify;
   RowWrapper({
-    required Widget child,
+    required super.child,
     this.data,
     required this.shouldNotify,
-  }) : super(child: child);
+  });
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
@@ -24,17 +25,21 @@ class RowWrapper extends InheritedWidget {
   }
 }
 
+// Widget for a single selectable row
 class _SelectRow extends StatelessWidget {
   final Function(bool) onChange;
   final bool selected;
   final String text;
 
-  const _SelectRow({Key? key, required this.onChange, required this.selected, required this.text}) : super(key: key);
+  const _SelectRow(
+      {required this.onChange, required this.selected, required this.text});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      // Triggered on tap
       onTap: () {
+        // Update selection state and rebuild the widget
         onChange(!selected);
         _theState.notify();
       },
@@ -43,12 +48,18 @@ class _SelectRow extends StatelessWidget {
         child: Row(
           children: [
             Checkbox(
+                // Set checkbox value based on selection
                 value: selected,
+                // Update selection state and rebuild the widget
                 onChanged: (x) {
                   onChange(x!);
                   _theState.notify();
                 }),
-            Text(text)
+            Expanded(
+              child: Text(
+                text,
+              ),
+            ),
           ],
         ),
       ),
@@ -56,6 +67,7 @@ class _SelectRow extends StatelessWidget {
   }
 }
 
+/// Docstring explaining the widget functionality
 ///
 /// A Dropdown multiselect menu
 ///
@@ -89,10 +101,13 @@ class DropDownMultiSelect<T> extends StatefulWidget {
   final Widget Function(T option)? menuItembuilder;
 
   /// a function to validate
-  final String Function(T? selectedOptions)? validator;
+  final String? Function(T? selectedOptions)? validator;
 
   /// defines whether the widget is read-only
   final bool readOnly;
+
+  /// The maximum height of the menu.
+  final double? menuMaxHeight;
 
   /// icon shown on the right side of the field
   final Widget? icon;
@@ -104,12 +119,13 @@ class DropDownMultiSelect<T> extends StatefulWidget {
   final Widget? hint;
 
   /// selectedValue separator
-  final String separator;
+  final T? separator;
+
   /// style for the selected values
   final TextStyle? selectedValuesStyle;
 
   const DropDownMultiSelect({
-    Key? key,
+    super.key,
     required this.options,
     required this.selectedValues,
     required this.onChanged,
@@ -124,56 +140,67 @@ class DropDownMultiSelect<T> extends StatefulWidget {
     this.enabled = true,
     this.decoration,
     this.validator,
+    this.menuMaxHeight,
     this.readOnly = false,
-    this.separator = ' , ',
-  }) : super(key: key);
+    this.separator,
+  });
 
   @override
-  _DropDownMultiSelectState createState() => _DropDownMultiSelectState<T>();
+  State<DropDownMultiSelect> createState() => _DropDownMultiSelectState<T>();
 }
 
-class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState>> {
+class _DropDownMultiSelectState<TState>
+    extends State<DropDownMultiSelect<TState>> {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
+          // Display selected values (custom or default)
           _theState.rebuild(() => widget.childBuilder != null
               ? widget.childBuilder!(widget.selectedValues)
               : Padding(
-                  padding:
-                      widget.decoration !=null ? widget.decoration!.contentPadding !=null ? widget.decoration!.contentPadding! : EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.symmetric(horizontal: 10),
+                  padding: widget.decoration != null
+                      ? widget.decoration!.contentPadding != null
+                          ? widget.decoration!.contentPadding!
+                          : EdgeInsets.symmetric(horizontal: 10)
+                      : EdgeInsets.symmetric(horizontal: 10),
                   child: Padding(
-                    
                     padding: const EdgeInsets.only(right: 20),
-                    child: Text(widget.selectedValues.length > 0
-                        ? widget.selectedValues
-                            .reduce((a, b) => a + widget.separator + b)
+                    child: Text(widget.selectedValues.isNotEmpty
+                        ? widget.selectedValues.map((e) => e.toString()).reduce(
+                            (a, b) =>
+                                a +
+                                (widget.separator != null
+                                    ? widget.separator.toString()
+                                    : ',') +
+                                b)
                         : widget.whenEmpty ?? ''),
                   ))),
-
-         
+          // Dropdown button with custom menu items
           Container(
             child: DropdownButtonFormField<TState>(
+              menuMaxHeight: widget.menuMaxHeight,
               hint: widget.hint,
               style: widget.hintStyle,
               icon: widget.icon,
-              validator: widget.validator != null ? widget.validator : null,
-              decoration: widget.decoration != null
-                  ? widget.decoration
-                  : InputDecoration(
-                      border: OutlineInputBorder(),
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 10,
-                      ),
+              validator: widget.validator,
+              decoration: widget.decoration ??
+                  InputDecoration(
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 15,
+                      horizontal: 10,
                     ),
+                  ),
               isDense: widget.isDense,
               onChanged: widget.enabled ? (x) {} : null,
               isExpanded: false,
-              value: widget.selectedValues.length > 0 ? widget.selectedValues[0] : null,
+              value: widget.selectedValues.isNotEmpty
+                  ? widget.selectedValues[0]
+                  : null,
               selectedItemBuilder: (context) {
                 return widget.options
                     .map((e) => DropdownMenuItem(
@@ -222,21 +249,36 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
                   .toList(),
             ),
           ),
-          _theState.rebuild(() => widget.childBuilder != null
-              ? widget.childBuilder!(widget.selectedValues)
-              : Padding(
-                  padding: widget.decoration != null
-                      ? widget.decoration!.contentPadding != null
-                          ? widget.decoration!.contentPadding!
-                          : EdgeInsets.symmetric(horizontal: 10)
-                      : EdgeInsets.symmetric(horizontal: 20),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text(
-                      widget.selectedValues.length > 0 ? widget.selectedValues.map((e) => e.toString()).reduce((a, b) => a.toString() + ' , ' + b.toString()) : widget.whenEmpty ?? '',
-                      style: widget.selectedValuesStyle,
+          _theState.rebuild(
+            () => widget.childBuilder != null
+                ? widget.childBuilder!(widget.selectedValues)
+                : Padding(
+                    padding: widget.decoration != null
+                        ? widget.decoration!.contentPadding != null
+                            ? widget.decoration!.contentPadding!
+                            : EdgeInsets.symmetric(horizontal: 10)
+                        : EdgeInsets.symmetric(horizontal: 20),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          widget.selectedValues.isNotEmpty
+                              ? widget.selectedValues
+                                  .map((e) => e.toString())
+                                  .reduce((a, b) =>
+                                      a.toString() +
+                                      (widget.separator != null
+                                          ? widget.separator.toString()
+                                          : ' , ') +
+                                      b.toString())
+                              : widget.whenEmpty ?? '',
+                          style: widget.selectedValuesStyle,
+                        ),
+                      ),
                     ),
-                  ))),
+                  ),
+          ),
         ],
       ),
     );
