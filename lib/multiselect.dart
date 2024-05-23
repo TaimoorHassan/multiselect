@@ -150,7 +150,7 @@ class _DropDownMultiSelectState<TState> extends State<DropDownMultiSelect<TState
                     child: Text(widget.selectedValues.length > 0
                         ? widget.selectedValues
                             .reduce((a, b) => a + widget.separator + b)
-                        : widget.whenEmpty ?? ''),
+                        : widget.whenEmpty ?? '', maxLines: 1,),
                   ))),
 
          
