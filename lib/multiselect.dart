@@ -38,19 +38,22 @@ class _SelectRow extends StatelessWidget {
         onChange(!selected);
         _theState.notify();
       },
-      child: Container(
-        height: kMinInteractiveDimension,
-        child: Row(
-          children: [
-            Checkbox(
-                value: selected,
-                onChanged: (x) {
-                  onChange(x!);
-                  _theState.notify();
-                }),
-            Text(text)
-          ],
-        ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Checkbox(
+              value: selected,
+              onChanged: (x) {
+                onChange(x!);
+                _theState.notify();
+              }),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Text(text),
+            ),
+          )
+        ],
       ),
     );
   }
